@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Edit Product - Perishable Stock Verification</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f7f5ff;
+            color: #1e1b4b;
+        }
+
+        /* Page */
+
+        .page-container {
+            min-height: 100vh;
+            padding: 30px;
+        }
+
+        /* Header */
+
+        .top-header {
+            max-width: 1000px;
+            margin: 0 auto 25px;
+
+            padding: 25px 30px;
+
+            border-radius: 18px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #4c1d95,
+                    #312e81
+                );
+
+            color: white;
+
+            box-shadow:
+                0 8px 25px rgba(76, 29, 149, 0.20);
+        }
+
+        .top-header h1 {
+            margin: 0 0 8px;
+            font-size: 28px;
+        }
+
+        .top-header p {
+            margin: 0;
+            color: #e9d5ff;
+            font-size: 14px;
+        }
+
+        /* Main Card */
+
+        .edit-card {
+            max-width: 1000px;
+            margin: auto;
+
+            background: white;
+
+            border-radius: 18px;
+
+            padding: 30px;
+
+            border: 1px solid #e9e5ff;
+
+            box-shadow:
+                0 5px 20px rgba(49, 46, 129, 0.10);
+        }
+
+        .section-title {
+            margin-bottom: 25px;
+        }
+
+        .section-title h2 {
+            margin: 0 0 6px;
+            color: #312e81;
+            font-size: 21px;
+        }
+
+        .section-title p {
+            margin: 0;
+            color: #6b7280;
+            font-size: 13px;
+        }
+
+        /* Form Grid */
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .full-width {
+            grid-column: 1 / -1;
+        }
+
+        label {
+            margin-bottom: 8px;
+
+            font-size: 14px;
+
+            font-weight: bold;
+
+            color: #374151;
+        }
+
+        input,
+        select {
+            width: 100%;
+
+            padding: 12px 13px;
+
+            border: 1px solid #d1d5db;
+
+            border-radius: 10px;
+
+            outline: none;
+
+            background: #fafafa;
+
+            font-size: 14px;
+
+            color: #374151;
+
+            transition: 0.2s;
+        }
+
+        input:focus,
+        select:focus {
+            border-color: #6366f1;
+
+            background: white;
+
+            box-shadow:
+                0 0 0 3px rgba(99, 102, 241, 0.12);
+        }
+
+        input[type="file"] {
+            padding: 10px;
+            background: white;
+        }
+
+        /* Image Section */
+
+        .image-section {
+            margin-top: 30px;
+
+            padding: 22px;
+
+            border-radius: 15px;
+
+            background: #faf9ff;
+
+            border: 1px solid #e9e5ff;
+        }
+
+        .image-section h3 {
+            margin: 0 0 18px;
+
+            color: #312e81;
+
+            font-size: 17px;
+        }
+
+        .image-grid {
+            display: grid;
+
+            grid-template-columns: 1fr 1fr;
+
+            gap: 20px;
+        }
+
+        .image-box {
+            background: white;
+
+            border: 1px solid #e5e7eb;
+
+            border-radius: 12px;
+
+            padding: 15px;
+
+            text-align: center;
+        }
+
+        .image-box h4 {
+            margin: 0 0 12px;
+
+            color: #4b5563;
+
+            font-size: 13px;
+        }
+
+        .current-image,
+        .new-image {
+            width: 170px;
+            height: 170px;
+
+            object-fit: contain;
+
+            border-radius: 12px;
+
+            border: 1px solid #ddd6fe;
+
+            background: #f9fafb;
+
+            margin: 5px auto 0;
+
+            display: block;
+        }
+
+        .new-image {
+            display: none;
+        }
+
+        .upload-area {
+            margin-top: 15px;
+        }
+
+        /* Buttons */
+
+        .button-area {
+            display: flex;
+
+            gap: 12px;
+
+            margin-top: 30px;
+        }
+
+        .update-btn,
+        .cancel-btn {
+            border: none;
+
+            padding: 13px 24px;
+
+            border-radius: 10px;
+
+            font-size: 14px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+            transition: 0.2s;
+        }
+
+        .update-btn {
+            background:
+                linear-gradient(
+                    135deg,
+                    #6366f1,
+                    #4c1d95
+                );
+
+            color: white;
+        }
+
+        .update-btn:hover {
+            transform: translateY(-2px);
+
+            box-shadow:
+                0 7px 18px rgba(76, 29, 149, 0.25);
+        }
+
+        .cancel-btn {
+            background: #f3f4f6;
+
+            color: #374151;
+
+            border: 1px solid #d1d5db;
+        }
+
+        .cancel-btn:hover {
+            background: #e5e7eb;
+        }
+
+        /* Message */
+
+        #message {
+            min-height: 20px;
+
+            margin: 20px 0 0;
+
+            font-size: 14px;
+
+            font-weight: bold;
+
+            color: #6366f1;
+        }
+
+        /* Info */
+
+        .info-box {
+            margin-top: 25px;
+
+            padding: 14px 16px;
+
+            border-radius: 10px;
+
+            background: #eff6ff;
+
+            border: 1px solid #bfdbfe;
+
+            color: #1d4ed8;
+
+            font-size: 13px;
+
+            line-height: 1.5;
+        }
+
+        /* Responsive */
+
+        @media (max-width: 700px) {
+
+            .page-container {
+                padding: 15px;
+            }
+
+            .edit-card {
+                padding: 20px;
+            }
+
+            .form-grid,
+            .image-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .full-width {
+                grid-column: auto;
+            }
+
+            .top-header {
+                padding: 20px;
+            }
+
+            .top-header h1 {
+                font-size: 23px;
+            }
+
+            .button-area {
+                flex-direction: column;
+            }
+
+            .update-btn,
+            .cancel-btn {
+                width: 100%;
+            }
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="page-container">
+
+
+    <!-- Header -->
+
+    <div class="top-header">
+
+        <h1>
+            ✏️ Edit Product
+        </h1>
+
+        <p>
+            Update product details, storage information and product picture.
+        </p>
+
+    </div>
+
+
+    <!-- Main Card -->
+
+    <div class="edit-card">
+
+
+        <div class="section-title">
+
+            <h2>
+                📦 Product Information
+            </h2>
+
+            <p>
+                Modify the product information below and save the changes.
+            </p>
+
+        </div>
+
+
+        <form id="editForm"
+              enctype="multipart/form-data">
+
+
+            <input type="hidden"
+                   id="product_id"
+                   name="product_id">
+
+
+            <!-- Form Fields -->
+
+            <div class="form-grid">
+
+
+                <!-- Product Name -->
+
+                <div class="form-group">
+
+                    <label for="product_name">
+                        Product Name
+                    </label>
+
+                    <input
+                        type="text"
+                        id="product_name"
+                        name="product_name"
+                        placeholder="Enter product name"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- Category -->
+
+                <div class="form-group">
+
+                    <label for="category">
+                        Category
+                    </label>
+
+                    <select
+                        id="category"
+                        name="category"
+                        required
+                    >
+
+                        <option value="Dairy">
+                            Dairy
+                        </option>
+
+                        <option value="Fruit">
+                            Fruit
+                        </option>
+
+                        <option value="Vegetable">
+                            Vegetable
+                        </option>
+
+                        <option value="Other">
+                            Other
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- Quantity -->
+
+                <div class="form-group">
+
+                    <label for="quantity">
+                        Quantity
+                    </label>
+
+                    <input
+                        type="number"
+                        id="quantity"
+                        name="quantity"
+                        min="1"
+                        placeholder="Enter quantity"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- Purchase Date -->
+
+                <div class="form-group">
+
+                    <label for="purchase_date">
+                        Purchase Date
+                    </label>
+
+                    <input
+                        type="date"
+                        id="purchase_date"
+                        name="purchase_date"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- Expiry Date -->
+
+                <div class="form-group">
+
+                    <label for="expiry_date">
+                        Expiry Date
+                    </label>
+
+                    <input
+                        type="date"
+                        id="expiry_date"
+                        name="expiry_date"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- Temperature -->
+
+                <div class="form-group">
+
+                    <label for="storage_temperature">
+                        Storage Temperature (°C)
+                    </label>
+
+                    <input
+                        type="number"
+                        step="0.01"
+                        id="storage_temperature"
+                        name="storage_temperature"
+                        placeholder="Example: 5.00"
+                    >
+
+                </div>
+
+
+                <!-- Storage Condition -->
+
+                <div class="form-group full-width">
+
+                    <label for="storage_condition">
+                        Storage Condition
+                    </label>
+
+                    <input
+                        type="text"
+                        id="storage_condition"
+                        name="storage_condition"
+                        placeholder="Example: Refrigerator"
+                    >
+
+                </div>
+
+
+            </div>
+
+
+            <!-- Image Section -->
+
+            <div class="image-section">
+
+                <h3>
+                    🖼️ Product Picture
+                </h3>
+
+
+                <div class="image-grid">
+
+
+                    <!-- Current Image -->
+
+                    <div class="image-box">
+
+                        <h4>
+                            Current Product Picture
+                        </h4>
+
+                        <img
+                            id="currentImage"
+                            class="current-image"
+                            alt="Current Product Image"
+                        >
+
+                    </div>
+
+
+                    <!-- New Image -->
+
+                    <div class="image-box">
+
+                        <h4>
+                            New Product Picture
+                        </h4>
+
+                        <img
+                            id="newImage"
+                            class="new-image"
+                            alt="New Product Image"
+                        >
+
+                        <div class="upload-area">
+
+                            <label for="product_image">
+                                Choose New Picture
+                            </label>
+
+                            <input
+                                type="file"
+                                id="product_image"
+                                name="product_image"
+                                accept="image/jpeg,image/png,image/webp,image/gif"
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+
+            <!-- Buttons -->
+
+            <div class="button-area">
+
+                <button
+                    type="submit"
+                    class="update-btn"
+                >
+                    💾 Update Product
+                </button>
+
+
+                <button
+                    type="button"
+                    class="cancel-btn"
+                    onclick="goBack()"
+                >
+                    ← Cancel
+                </button>
+
+            </div>
+
+
+            <p id="message"></p>
+
+
+        </form>
+
+
+        <div class="info-box">
+
+            💡 <strong>Tip:</strong>
+            If you do not choose a new picture, the existing
+            product picture will be retained.
+
+        </div>
+
+
+    </div>
+
+</div>
+
+
+<script>
+
+const params =
+    new URLSearchParams(
+        window.location.search
+    );
+
+const productId =
+    params.get("id");
+
+const message =
+    document.getElementById("message");
+
+const currentImage =
+    document.getElementById("currentImage");
+
+const newImage =
+    document.getElementById("newImage");
+
+const imageInput =
+    document.getElementById("product_image");
+
+
+/* LOAD PRODUCT */
+
+if (!productId) {
+
+    message.textContent =
+        "Product ID not found.";
+
+    message.style.color =
+        "#dc2626";
+
+} else {
+
+    loadProduct();
+
+}
+
+
+function loadProduct() {
+
+    fetch("../backend/get_products.php")
+
+        .then(response =>
+            response.json()
+        )
+
+        .then(products => {
+
+            const product =
+                products.find(
+                    p =>
+                    String(p.product_id)
+                    === String(productId)
+                );
+
+
+            if (!product) {
+
+                message.textContent =
+                    "Product not found.";
+
+                message.style.color =
+                    "#dc2626";
+
+                return;
+
+            }
+
+
+            document.getElementById(
+                "product_id"
+            ).value =
+                product.product_id;
+
+
+            document.getElementById(
+                "product_name"
+            ).value =
+                product.product_name;
+
+
+            document.getElementById(
+                "category"
+            ).value =
+                product.category;
+
+
+            document.getElementById(
+                "quantity"
+            ).value =
+                product.quantity;
+
+
+            document.getElementById(
+                "purchase_date"
+            ).value =
+                product.purchase_date;
+
+
+            document.getElementById(
+                "expiry_date"
+            ).value =
+                product.expiry_date;
+
+
+            document.getElementById(
+                "storage_temperature"
+            ).value =
+                product.storage_temperature || "";
+
+
+            document.getElementById(
+                "storage_condition"
+            ).value =
+                product.storage_condition || "";
+
+
+            /* CURRENT IMAGE */
+
+            if (product.image_path) {
+
+                currentImage.src =
+                    "../" +
+                    product.image_path;
+
+                currentImage.style.display =
+                    "block";
+
+            } else {
+
+                currentImage.style.display =
+                    "none";
+
+            }
+
+        })
+
+        .catch(error => {
+
+            console.error(error);
+
+            message.textContent =
+                "Unable to load product.";
+
+            message.style.color =
+                "#dc2626";
+
+        });
+
+}
+
+
+/* NEW IMAGE PREVIEW */
+
+imageInput.addEventListener(
+    "change",
+    function () {
+
+        const file =
+            this.files[0];
+
+        if (!file) {
+
+            newImage.style.display =
+                "none";
+
+            return;
+
+        }
+
+
+        if (!file.type.startsWith("image/")) {
+
+            message.textContent =
+                "Please select a valid image.";
+
+            message.style.color =
+                "#dc2626";
+
+            this.value = "";
+
+            return;
+
+        }
+
+
+        newImage.src =
+            URL.createObjectURL(file);
+
+        newImage.style.display =
+            "block";
+
+        message.textContent =
+            "";
+
+    }
+);
+
+
+/* UPDATE */
+
+document.getElementById(
+    "editForm"
+).addEventListener(
+    "submit",
+    async function(event) {
+
+        event.preventDefault();
+
+        message.textContent =
+            "Updating product...";
+
+        message.style.color =
+            "#6366f1";
+
+
+        try {
+
+            const formData =
+                new FormData(this);
+
+
+            const response =
+                await fetch(
+                    "../backend/update_product.php",
+                    {
+                        method: "POST",
+                        body: formData
+                    }
+                );
+
+
+            const result =
+                await response.json();
+
+
+            message.textContent =
+                result.message;
+
+
+            if (result.success) {
+
+                message.style.color =
+                    "#16a34a";
+
+
+                setTimeout(
+                    function() {
+
+                        window.location.href =
+                            "stock.html";
+
+                    },
+                    800
+                );
+
+            } else {
+
+                message.style.color =
+                    "#dc2626";
+
+            }
+
+        }
+
+        catch(error) {
+
+            console.error(error);
+
+            message.textContent =
+                "Update failed.";
+
+            message.style.color =
+                "#dc2626";
+
+        }
+
+    }
+);
+
+
+/* BACK */
+
+function goBack() {
+
+    window.location.href =
+        "stock.html";
+
+}
+
+</script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Login - Perishable Stock Verification</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            min-height: 100vh;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            background:
+                radial-gradient(circle at 15% 20%, #ddd6fe 0, transparent 30%),
+                radial-gradient(circle at 85% 80%, #dbeafe 0, transparent 30%),
+                #f7f5ff;
+
+            color: #1e1b4b;
+        }
+
+        /* Main Layout */
+
+        .login-wrapper {
+            width: 900px;
+            max-width: 92%;
+
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+
+            background: white;
+
+            border-radius: 24px;
+
+            overflow: hidden;
+
+            box-shadow:
+                0 20px 60px rgba(49, 46, 129, 0.18);
+        }
+
+        /* Left Section */
+
+        .login-info {
+            padding: 50px 45px;
+
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    #4c1d95,
+                    #312e81
+                );
+
+            color: white;
+        }
+
+        .logo-icon {
+            width: 70px;
+            height: 70px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 20px;
+
+            background: rgba(255, 255, 255, 0.15);
+
+            font-size: 38px;
+
+            margin-bottom: 25px;
+        }
+
+        .login-info h1 {
+            font-size: 32px;
+            line-height: 1.2;
+
+            margin-bottom: 15px;
+        }
+
+        .login-info p {
+            color: #ddd6fe;
+
+            font-size: 15px;
+
+            line-height: 1.7;
+
+            margin-bottom: 30px;
+        }
+
+        .feature-list {
+            display: flex;
+            flex-direction: column;
+            gap: 13px;
+        }
+
+        .feature {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+
+            font-size: 14px;
+
+            color: #f5f3ff;
+        }
+
+        .feature-icon {
+            width: 30px;
+            height: 30px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 8px;
+
+            background: rgba(255, 255, 255, 0.12);
+        }
+
+        /* Right Login Section */
+
+        .login-box {
+            padding: 50px 45px;
+
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .login-box h2 {
+            font-size: 28px;
+
+            color: #312e81;
+
+            margin-bottom: 8px;
+        }
+
+        .login-subtitle {
+            color: #6b7280;
+
+            font-size: 14px;
+
+            margin-bottom: 30px;
+        }
+
+        /* Form */
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+
+            margin-bottom: 8px;
+
+            font-size: 14px;
+
+            font-weight: bold;
+
+            color: #374151;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-icon {
+            position: absolute;
+
+            left: 14px;
+            top: 50%;
+
+            transform: translateY(-50%);
+
+            font-size: 17px;
+        }
+
+        .form-group input {
+            width: 100%;
+
+            padding: 13px 14px 13px 44px;
+
+            border: 1px solid #d1d5db;
+
+            border-radius: 10px;
+
+            outline: none;
+
+            font-size: 14px;
+
+            transition: 0.2s;
+
+            background: #fafafa;
+        }
+
+        .form-group input:focus {
+            border-color: #6366f1;
+
+            background: white;
+
+            box-shadow:
+                0 0 0 3px rgba(99, 102, 241, 0.12);
+        }
+
+        /* Login Button */
+
+        .login-button {
+            width: 100%;
+
+            border: none;
+
+            padding: 14px;
+
+            border-radius: 10px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #6366f1,
+                    #4c1d95
+                );
+
+            color: white;
+
+            font-size: 15px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+            transition: 0.2s;
+
+            margin-top: 5px;
+        }
+
+        .login-button:hover {
+            transform: translateY(-2px);
+
+            box-shadow:
+                0 8px 20px rgba(76, 29, 149, 0.25);
+        }
+
+        .login-button:active {
+            transform: translateY(0);
+        }
+
+        /* Message */
+
+        #message {
+            min-height: 20px;
+
+            margin-top: 18px;
+
+            text-align: center;
+
+            font-size: 13px;
+
+            font-weight: bold;
+        }
+
+        /* Demo Login */
+
+        .demo-box {
+            margin-top: 25px;
+
+            padding: 13px 15px;
+
+            border-radius: 10px;
+
+            background: #f5f3ff;
+
+            border: 1px solid #ddd6fe;
+
+            font-size: 12px;
+
+            color: #6d28d9;
+
+            text-align: center;
+        }
+
+        .demo-box strong {
+            color: #4c1d95;
+        }
+
+        /* Back */
+
+        .back-link {
+            display: block;
+
+            text-align: center;
+
+            margin-top: 20px;
+
+            text-decoration: none;
+
+            color: #6366f1;
+
+            font-size: 13px;
+
+            font-weight: bold;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Responsive */
+
+        @media (max-width: 750px) {
+
+            .login-wrapper {
+                grid-template-columns: 1fr;
+
+                max-width: 450px;
+            }
+
+            .login-info {
+                padding: 35px;
+
+                text-align: center;
+
+                align-items: center;
+            }
+
+            .login-info h1 {
+                font-size: 27px;
+            }
+
+            .feature-list {
+                text-align: left;
+            }
+
+            .login-box {
+                padding: 35px;
+            }
+        }
+
+        @media (max-width: 450px) {
+
+            .login-wrapper {
+                max-width: 95%;
+
+                border-radius: 18px;
+            }
+
+            .login-info,
+            .login-box {
+                padding: 28px 22px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="login-wrapper">
+
+
+    <!-- LEFT INFORMATION -->
+
+    <div class="login-info">
+
+        <div class="logo-icon">
+            📦
+        </div>
+
+        <h1>
+            Perishable Stock
+            Verification System
+        </h1>
+
+        <p>
+            Manage, verify and monitor perishable
+            products using expiry dates, quantity
+            and storage conditions.
+        </p>
+
+
+        <div class="feature-list">
+
+            <div class="feature">
+
+                <span class="feature-icon">
+                    📦
+                </span>
+
+                Product Management
+
+            </div>
+
+
+            <div class="feature">
+
+                <span class="feature-icon">
+                    🔍
+                </span>
+
+                Stock Verification
+
+            </div>
+
+
+            <div class="feature">
+
+                <span class="feature-icon">
+                    📊
+                </span>
+
+                Reports & History
+
+            </div>
+
+
+            <div class="feature">
+
+                <span class="feature-icon">
+                    ⚡
+                </span>
+
+                Priority-Based Actions
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- RIGHT LOGIN -->
+
+    <div class="login-box">
+
+        <h2>
+            Welcome Back 👋
+        </h2>
+
+        <p class="login-subtitle">
+            Login to access your stock management dashboard.
+        </p>
+
+
+        <form id="loginForm">
+
+
+            <!-- Username -->
+
+            <div class="form-group">
+
+                <label for="username">
+                    Username
+                </label>
+
+                <div class="input-wrapper">
+
+                    <span class="input-icon">
+                        👤
+                    </span>
+
+                    <input
+                        type="text"
+                        id="username"
+                        placeholder="Enter username"
+                        autocomplete="username"
+                        required
+                    >
+
+                </div>
+
+            </div>
+
+
+            <!-- Password -->
+
+            <div class="form-group">
+
+                <label for="password">
+                    Password
+                </label>
+
+                <div class="input-wrapper">
+
+                    <span class="input-icon">
+                        🔒
+                    </span>
+
+                    <input
+                        type="password"
+                        id="password"
+                        placeholder="Enter password"
+                        autocomplete="current-password"
+                        required
+                    >
+
+                </div>
+
+            </div>
+
+
+            <!-- Login Button -->
+
+            <button
+                type="submit"
+                class="login-button"
+            >
+                🔐 Login
+            </button>
+
+
+        </form>
+
+
+        <!-- Message -->
+
+        <p id="message"></p>
+
+
+        <!-- Demo Credentials -->
+
+        <div class="demo-box">
+
+            Demo Login:
+            <strong>admin</strong>
+            /
+            <strong>admin123</strong>
+
+        </div>
+
+
+        <!-- Back -->
+
+        <a href="index.html" class="back-link">
+            ← Back to Home
+        </a>
+
+
+    </div>
+
+
+</div>
+
+
+<script>
+
+document.getElementById("loginForm").addEventListener("submit", function(event) {
+
+    event.preventDefault();
+
+    const username =
+        document.getElementById("username").value;
+
+    const password =
+        document.getElementById("password").value;
+
+
+    const message =
+        document.getElementById("message");
+
+
+    message.innerText = "Logging in...";
+    message.style.color = "#6366f1";
+
+
+    fetch("../backend/login.php", {
+
+        method: "POST",
+
+        headers: {
+            "Content-Type":
+                "application/x-www-form-urlencoded"
+        },
+
+        body:
+            "username=" +
+            encodeURIComponent(username) +
+            "&password=" +
+            encodeURIComponent(password)
+
+    })
+
+    .then(response => response.json())
+
+    .then(data => {
+
+        message.innerText =
+            data.message;
+
+
+        if (data.success) {
+
+            message.style.color =
+                "#16a34a";
+
+
+            localStorage.setItem(
+                "user",
+                JSON.stringify(data.user)
+            );
+
+
+            setTimeout(function() {
+
+                window.location.href =
+                    "dashboard.html";
+
+            }, 500);
+
+        }
+
+        else {
+
+            message.style.color =
+                "#dc2626";
+
+        }
+
+    })
+
+    .catch(error => {
+
+        console.error(error);
+
+        message.innerText =
+            "Server connection error.";
+
+        message.style.color =
+            "#dc2626";
+
+    });
+
+});
+
+</script>
+
+
+</body>
+</html>

@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Add Product | Perishable Stock Verification</title>
+
+    <link rel="stylesheet"
+          href="css/style.css">
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: "Segoe UI", Arial, sans-serif;
+            background: linear-gradient(
+                135deg,
+                #f7f5ff 0%,
+                #eef2ff 50%,
+                #f8faff 100%
+            );
+            min-height: 100vh;
+            color: #1e1b4b;
+        }
+
+
+        /* TOP BAR */
+
+        .topbar {
+            height: 76px;
+            background: linear-gradient(
+                135deg,
+                #4c1d95,
+                #312e81,
+                #2563eb
+            );
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 45px;
+            box-shadow: 0 5px 20px rgba(49, 46, 129, 0.25);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .brand-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            background: rgba(255,255,255,0.16);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .brand-text h2 {
+            margin: 0;
+            font-size: 20px;
+        }
+
+        .brand-text p {
+            margin: 3px 0 0;
+            font-size: 12px;
+            opacity: 0.8;
+        }
+
+
+        /* BACK BUTTON */
+
+        .back-btn {
+            color: white;
+            text-decoration: none;
+            padding: 10px 18px;
+            border-radius: 10px;
+            background: rgba(255,255,255,0.14);
+            border: 1px solid rgba(255,255,255,0.2);
+            transition: 0.25s;
+            font-size: 14px;
+        }
+
+        .back-btn:hover {
+            background: rgba(255,255,255,0.25);
+            transform: translateY(-1px);
+        }
+
+
+        /* MAIN */
+
+        .page-wrapper {
+            width: 92%;
+            max-width: 1100px;
+            margin: 35px auto 60px;
+        }
+
+
+        /* PAGE TITLE */
+
+        .page-heading {
+            margin-bottom: 25px;
+        }
+
+        .page-heading h1 {
+            margin: 0;
+            font-size: 30px;
+            color: #312e81;
+        }
+
+        .page-heading p {
+            margin: 7px 0 0;
+            color: #64748b;
+            font-size: 14px;
+        }
+
+
+        /* FORM CARD */
+
+        .form-card {
+            background: white;
+            border-radius: 22px;
+            padding: 32px;
+            box-shadow:
+                0 12px 35px rgba(49, 46, 129, 0.10);
+            border: 1px solid #e5e7eb;
+        }
+
+
+        /* SECTION TITLE */
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 22px;
+            padding-bottom: 14px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .section-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            background: linear-gradient(
+                135deg,
+                #ede9fe,
+                #dbeafe
+            );
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .section-title h2 {
+            margin: 0;
+            font-size: 18px;
+            color: #312e81;
+        }
+
+
+        /* FORM GRID */
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group.full {
+            grid-column: 1 / -1;
+        }
+
+
+        /* LABEL */
+
+        label {
+            font-size: 13px;
+            font-weight: 600;
+            color: #3730a3;
+            margin-bottom: 8px;
+        }
+
+
+        /* INPUTS */
+
+        input,
+        select {
+            width: 100%;
+            height: 46px;
+            border: 1px solid #dbe1ea;
+            border-radius: 10px;
+            padding: 0 14px;
+            font-size: 14px;
+            color: #1e293b;
+            background: #ffffff;
+            outline: none;
+            transition: 0.25s;
+        }
+
+        input:focus,
+        select:focus {
+            border-color: #6366f1;
+            box-shadow: 0 0 0 3px rgba(99,102,241,0.12);
+        }
+
+        input::placeholder {
+            color: #94a3b8;
+        }
+
+
+        /* FILE UPLOAD */
+
+        .upload-box {
+            border: 2px dashed #c4b5fd;
+            border-radius: 14px;
+            padding: 22px;
+            background: #faf9ff;
+            transition: 0.25s;
+        }
+
+        .upload-box:hover {
+            border-color: #6366f1;
+            background: #f5f3ff;
+        }
+
+        input[type="file"] {
+            width: 100%;
+            height: auto;
+            border: none;
+            padding: 0;
+            background: transparent;
+            box-shadow: none;
+        }
+
+        input[type="file"]:focus {
+            box-shadow: none;
+        }
+
+        .upload-text {
+            margin-top: 7px;
+            font-size: 12px;
+            color: #64748b;
+        }
+
+
+        /* IMAGE PREVIEW */
+
+        .preview-area {
+            margin-top: 18px;
+            display: none;
+            text-align: center;
+        }
+
+        .preview-label {
+            font-size: 13px;
+            font-weight: 600;
+            color: #4338ca;
+            margin-bottom: 10px;
+        }
+
+        .image-preview {
+            width: 180px;
+            height: 180px;
+            object-fit: contain;
+            padding: 8px;
+            border-radius: 16px;
+            border: 1px solid #ddd6fe;
+            background: white;
+            box-shadow: 0 8px 20px rgba(79,70,229,0.12);
+        }
+
+
+        /* ACTION AREA */
+
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            margin-top: 30px;
+            padding-top: 24px;
+            border-top: 1px solid #e5e7eb;
+        }
+
+
+        /* BUTTONS */
+
+        .btn {
+            border: none;
+            border-radius: 11px;
+            padding: 13px 25px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.25s;
+        }
+
+        .btn-primary {
+            color: white;
+            background: linear-gradient(
+                135deg,
+                #7c3aed,
+                #4f46e5,
+                #2563eb
+            );
+            box-shadow: 0 6px 16px rgba(79,70,229,0.25);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 9px 22px rgba(79,70,229,0.32);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-secondary {
+            color: #4338ca;
+            background: #eef2ff;
+            border: 1px solid #c7d2fe;
+        }
+
+        .btn-secondary:hover {
+            background: #e0e7ff;
+        }
+
+
+        /* MESSAGE */
+
+        #message {
+            margin: 18px 0 0;
+            text-align: center;
+            font-size: 14px;
+            font-weight: 600;
+            min-height: 20px;
+        }
+
+
+        /* INFO BOX */
+
+        .info-box {
+            margin-top: 22px;
+            padding: 15px 18px;
+            border-radius: 12px;
+            background: linear-gradient(
+                135deg,
+                #f5f3ff,
+                #eff6ff
+            );
+            border: 1px solid #ddd6fe;
+            color: #4338ca;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+
+        /* RESPONSIVE */
+
+        @media (max-width: 700px) {
+
+            .topbar {
+                padding: 0 18px;
+            }
+
+            .brand-text h2 {
+                font-size: 16px;
+            }
+
+            .page-wrapper {
+                width: 94%;
+            }
+
+            .form-card {
+                padding: 22px;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-group.full {
+                grid-column: auto;
+            }
+
+            .form-actions {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- TOP BAR -->
+
+<header class="topbar">
+
+    <div class="brand">
+
+        <div class="brand-icon">
+            📦
+        </div>
+
+        <div class="brand-text">
+
+            <h2>Perishable Stock</h2>
+
+            <p>Verification System</p>
+
+        </div>
+
+    </div>
+
+
+    <a href="dashboard.html"
+       class="back-btn">
+
+        ← Dashboard
+
+    </a>
+
+</header>
+
+
+
+<!-- MAIN CONTENT -->
+
+<main class="page-wrapper">
+
+
+    <div class="page-heading">
+
+        <h1>
+            Add New Product
+        </h1>
+
+        <p>
+            Enter product details and storage information
+            to add a new item to your stock.
+        </p>
+
+    </div>
+
+
+
+    <div class="form-card">
+
+
+        <!-- PRODUCT INFORMATION -->
+
+        <div class="section-title">
+
+            <div class="section-icon">
+                📦
+            </div>
+
+            <h2>
+                Product Information
+            </h2>
+
+        </div>
+
+
+
+        <form id="productForm"
+              enctype="multipart/form-data">
+
+
+            <div class="form-grid">
+
+
+                <!-- PRODUCT NAME -->
+
+                <div class="form-group">
+
+                    <label for="product_name">
+                        Product Name
+                    </label>
+
+                    <input type="text"
+                           id="product_name"
+                           name="product_name"
+                           placeholder="Enter product name"
+                           required>
+
+                </div>
+
+
+
+                <!-- CATEGORY -->
+
+                <div class="form-group">
+
+                    <label for="category">
+                        Category
+                    </label>
+
+                    <select id="category"
+                            name="category"
+                            required>
+
+                        <option value="">
+                            Select Category
+                        </option>
+
+                        <option value="Dairy">
+                            🥛 Dairy
+                        </option>
+
+                        <option value="Fruit">
+                            🍎 Fruit
+                        </option>
+
+                        <option value="Vegetable">
+                            🥕 Vegetable
+                        </option>
+
+                        <option value="Other">
+                            📦 Other
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+
+                <!-- QUANTITY -->
+
+                <div class="form-group">
+
+                    <label for="quantity">
+                        Quantity
+                    </label>
+
+                    <input type="number"
+                           id="quantity"
+                           name="quantity"
+                           min="1"
+                           step="1"
+                           placeholder="Enter quantity"
+                           required>
+
+                </div>
+
+
+
+                <!-- PURCHASE DATE -->
+
+                <div class="form-group">
+
+                    <label for="purchase_date">
+                        Purchase Date
+                    </label>
+
+                    <input type="date"
+                           id="purchase_date"
+                           name="purchase_date"
+                           required>
+
+                </div>
+
+
+
+                <!-- EXPIRY DATE -->
+
+                <div class="form-group">
+
+                    <label for="expiry_date">
+                        Expiry Date
+                    </label>
+
+                    <input type="date"
+                           id="expiry_date"
+                           name="expiry_date"
+                           required>
+
+                </div>
+
+
+
+                <!-- TEMPERATURE -->
+
+                <div class="form-group">
+
+                    <label for="storage_temperature">
+                        Storage Temperature (°C)
+                    </label>
+
+                    <input type="number"
+                           step="0.01"
+                           id="storage_temperature"
+                           name="storage_temperature"
+                           placeholder="Example: 5.00">
+
+                </div>
+
+
+
+                <!-- STORAGE CONDITION -->
+
+                <div class="form-group full">
+
+                    <label for="storage_condition">
+                        Storage Condition
+                    </label>
+
+                    <input type="text"
+                           id="storage_condition"
+                           name="storage_condition"
+                           placeholder="Example: Refrigerated / Cool and Dry">
+
+                </div>
+
+
+
+                <!-- IMAGE -->
+
+                <div class="form-group full">
+
+                    <label for="product_image">
+                        🖼️ Choose Product Picture
+                    </label>
+
+
+                    <div class="upload-box">
+
+                        <input type="file"
+                               id="product_image"
+                               name="product_image"
+                               accept="image/jpeg,image/png,image/webp,image/gif"
+                               required>
+
+                        <div class="upload-text">
+                            Supported formats: JPG, PNG, WEBP, GIF
+                        </div>
+
+
+                        <div class="preview-area"
+                             id="previewArea">
+
+                            <div class="preview-label">
+                                👀 Image Preview
+                            </div>
+
+                            <img id="imagePreview"
+                                 class="image-preview"
+                                 alt="Selected product preview">
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- INFORMATION -->
+
+            <div class="info-box">
+
+                💡 <strong>Tip:</strong>
+                Make sure the purchase date, expiry date,
+                quantity and storage information are correct
+                before adding the product.
+
+            </div>
+
+
+
+            <!-- ACTIONS -->
+
+            <div class="form-actions">
+
+                <a href="dashboard.html"
+                   class="btn btn-secondary"
+                   style="text-decoration:none; text-align:center;">
+
+                    ↩️ Back to Dashboard
+
+                </a>
+
+
+                <button type="submit"
+                        id="submitButton"
+                        class="btn btn-primary">
+
+                    ➕ Add Product
+
+                </button>
+
+            </div>
+
+
+            <p id="message"
+               role="status"></p>
+
+
+        </form>
+
+    </div>
+
+
+</main>
+
+
+
+<script>
+
+
+const form =
+    document.getElementById("productForm");
+
+
+const imageInput =
+    document.getElementById("product_image");
+
+
+const preview =
+    document.getElementById("imagePreview");
+
+
+const previewArea =
+    document.getElementById("previewArea");
+
+
+const message =
+    document.getElementById("message");
+
+
+const submitButton =
+    document.getElementById("submitButton");
+
+
+
+/* IMAGE PREVIEW */
+
+imageInput.addEventListener("change", function () {
+
+    const file = this.files[0];
+
+    previewArea.style.display = "none";
+
+    preview.style.display = "none";
+
+    preview.removeAttribute("src");
+
+    message.textContent = "";
+
+
+    if (!file) {
+
+        return;
+
+    }
+
+
+    if (!file.type.startsWith("image/")) {
+
+        message.textContent =
+            "Please select a valid image.";
+
+        this.value = "";
+
+        return;
+
+    }
+
+
+    preview.src =
+        URL.createObjectURL(file);
+
+
+    previewArea.style.display =
+        "block";
+
+    preview.style.display =
+        "inline-block";
+
+});
+
+
+
+/* SUBMIT FORM */
+
+form.addEventListener("submit", async function (event) {
+
+    event.preventDefault();
+
+
+    if (!imageInput.files.length) {
+
+        message.textContent =
+            "Please choose a product picture.";
+
+        return;
+
+    }
+
+
+    submitButton.disabled =
+        true;
+
+
+    message.textContent =
+        "Uploading product...";
+
+
+    try {
+
+
+        const formData =
+            new FormData(form);
+
+
+        const response =
+            await fetch(
+                "../backend/add_product.php",
+                {
+                    method: "POST",
+                    body: formData
+                }
+            );
+
+
+        const result =
+            await response.json();
+
+
+        console.log(
+            "SERVER RESPONSE:",
+            result
+        );
+
+
+        message.textContent =
+            result.message ||
+            "Request completed.";
+
+
+        if (
+            response.ok &&
+            result.success
+        ) {
+
+
+            form.reset();
+
+
+            previewArea.style.display =
+                "none";
+
+
+            preview.style.display =
+                "none";
+
+
+            preview.removeAttribute(
+                "src"
+            );
+
+
+            message.textContent =
+                "Product added successfully!";
+
+
+        }
+
+    }
+
+
+    catch (error) {
+
+
+        console.error(error);
+
+
+        message.textContent =
+            "Error: " +
+            error.message;
+
+
+    }
+
+
+    finally {
+
+
+        submitButton.disabled =
+            false;
+
+
+    }
+
+});
+
+
+</script>
+
+
+</body>
+
+</html>

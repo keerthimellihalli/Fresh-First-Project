@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Reports - Perishable Stock Verification</title>
+    <link rel="stylesheet" href="css/style.css">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f7f5ff;
+            color: #1e1b4b;
+        }
+
+        .page-container {
+            width: 100%;
+            min-height: 100vh;
+            padding: 30px;
+        }
+
+        /* Header */
+
+        .top-header {
+            background: linear-gradient(135deg, #4c1d95, #312e81);
+            color: white;
+            padding: 25px 30px;
+            border-radius: 18px;
+            margin-bottom: 25px;
+            box-shadow: 0 8px 25px rgba(76, 29, 149, 0.20);
+        }
+
+        .top-header h1 {
+            margin: 0 0 8px;
+            font-size: 28px;
+        }
+
+        .top-header p {
+            margin: 0;
+            color: #e9d5ff;
+            font-size: 14px;
+        }
+
+        /* Report Card */
+
+        .report-card {
+            background: white;
+            border-radius: 18px;
+            padding: 25px;
+            box-shadow: 0 5px 20px rgba(49, 46, 129, 0.10);
+            border: 1px solid #e9e5ff;
+        }
+
+        .report-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            gap: 15px;
+        }
+
+        .report-title h2 {
+            margin: 0;
+            font-size: 20px;
+            color: #312e81;
+        }
+
+        .report-badge {
+            background: #ede9fe;
+            color: #6d28d9;
+            padding: 8px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        /* Table */
+
+        .table-wrapper {
+            width: 100%;
+            overflow-x: auto;
+            border-radius: 12px;
+            border: 1px solid #e5e7eb;
+        }
+
+        table {
+            width: 100%;
+            min-width: 900px;
+            border-collapse: collapse;
+            background: white;
+        }
+
+        thead {
+            background: linear-gradient(135deg, #4c1d95, #4338ca);
+            color: white;
+        }
+
+        th {
+            padding: 15px 12px;
+            text-align: left;
+            font-size: 13px;
+            white-space: nowrap;
+        }
+
+        td {
+            padding: 14px 12px;
+            border-bottom: 1px solid #eeeef5;
+            font-size: 14px;
+            color: #374151;
+        }
+
+        tbody tr:hover {
+            background: #faf9ff;
+        }
+
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Status badges */
+
+        .status-badge,
+        .priority-badge,
+        .action-badge {
+            display: inline-block;
+            padding: 6px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        .status-valid {
+            background: #dcfce7;
+            color: #15803d;
+        }
+
+        .status-near {
+            background: #ffedd5;
+            color: #c2410c;
+        }
+
+        .status-expired {
+            background: #fee2e2;
+            color: #b91c1c;
+        }
+
+        .status-other {
+            background: #ede9fe;
+            color: #6d28d9;
+        }
+
+        .priority-critical {
+            background: #fee2e2;
+            color: #b91c1c;
+        }
+
+        .priority-high {
+            background: #ffedd5;
+            color: #c2410c;
+        }
+
+        .priority-medium {
+            background: #fef3c7;
+            color: #a16207;
+        }
+
+        .priority-low {
+            background: #dcfce7;
+            color: #15803d;
+        }
+
+        .priority-other {
+            background: #ede9fe;
+            color: #6d28d9;
+        }
+
+        .action-badge {
+            background: #eff6ff;
+            color: #2563eb;
+        }
+
+        /* Empty / Error */
+
+        .message-row {
+            text-align: center !important;
+            padding: 35px !important;
+            color: #6b7280 !important;
+            font-size: 15px !important;
+        }
+
+        /* Back button */
+
+        .bottom-actions {
+            margin-top: 20px;
+        }
+
+        .back-btn {
+            border: none;
+            background: linear-gradient(135deg, #6366f1, #4c1d95);
+            color: white;
+            padding: 11px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            transition: 0.2s;
+        }
+
+        .back-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 5px 15px rgba(76, 29, 149, 0.25);
+        }
+
+        /* Responsive */
+
+        @media (max-width: 768px) {
+
+            .page-container {
+                padding: 15px;
+            }
+
+            .top-header {
+                padding: 20px;
+            }
+
+            .top-header h1 {
+                font-size: 23px;
+            }
+
+            .report-card {
+                padding: 15px;
+            }
+
+            .report-title {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="page-container">
+
+    <!-- Header -->
+
+    <div class="top-header">
+
+        <h1>Stock Verification Report</h1>
+
+        <p>
+            View the latest verification status, priority and required action for each product.
+        </p>
+
+    </div>
+
+
+    <!-- Report Card -->
+
+    <div class="report-card">
+
+        <div class="report-title">
+
+            <h2>Product Verification Summary</h2>
+
+            <span class="report-badge">
+                Stock Report
+            </span>
+
+        </div>
+
+
+        <div class="table-wrapper">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>ID</th>
+
+                        <th>Product</th>
+
+                        <th>Category</th>
+
+                        <th>Quantity</th>
+
+                        <th>Expiry Date</th>
+
+                        <th>Status</th>
+
+                        <th>Priority</th>
+
+                        <th>Action</th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody id="reportTable">
+
+                    <tr>
+
+                        <td
+                            colspan="8"
+                            class="message-row"
+                        >
+                            Loading report...
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+        <div class="bottom-actions">
+
+            <button
+                class="back-btn"
+                onclick="goDashboard()"
+            >
+                Back to Dashboard
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+fetch("../backend/reports.php")
+
+.then(response => response.json())
+
+.then(reports => {
+
+    const table =
+        document.getElementById("reportTable");
+
+
+    table.innerHTML = "";
+
+
+    if (reports.length === 0) {
+
+        table.innerHTML =
+            '<tr>' +
+            '<td colspan="8" class="message-row">' +
+            'No reports found' +
+            '</td>' +
+            '</tr>';
+
+        return;
+    }
+
+
+    reports.forEach(report => {
+
+        const row =
+            document.createElement("tr");
+
+
+        /* Status */
+
+        let status =
+            report.status || "Not Verified";
+
+
+        let statusClass =
+            "status-other";
+
+
+        if (status === "VALID") {
+
+            statusClass =
+                "status-valid";
+
+        }
+
+        else if (
+            status === "NEAR EXPIRY"
+        ) {
+
+            statusClass =
+                "status-near";
+
+        }
+
+        else if (
+            status === "EXPIRED"
+        ) {
+
+            statusClass =
+                "status-expired";
+
+        }
+
+
+        /* Priority */
+
+        let priority =
+            report.priority || "Not Assigned";
+
+
+        let priorityClass =
+            "priority-other";
+
+
+        if (priority === "Critical") {
+
+            priorityClass =
+                "priority-critical";
+
+        }
+
+        else if (priority === "High") {
+
+            priorityClass =
+                "priority-high";
+
+        }
+
+        else if (priority === "Medium") {
+
+            priorityClass =
+                "priority-medium";
+
+        }
+
+        else if (priority === "Low") {
+
+            priorityClass =
+                "priority-low";
+
+        }
+
+
+        row.innerHTML = `
+
+            <td>
+                <strong>
+                    #${report.product_id}
+                </strong>
+            </td>
+
+
+            <td>
+                <strong>
+                    ${report.product_name}
+                </strong>
+            </td>
+
+
+            <td>
+                ${report.category}
+            </td>
+
+
+            <td>
+                <strong>
+                    ${report.quantity}
+                </strong>
+            </td>
+
+
+            <td>
+                ${report.expiry_date}
+            </td>
+
+
+            <td>
+
+                <span
+                    class="status-badge ${statusClass}"
+                >
+                    ${status}
+                </span>
+
+            </td>
+
+
+            <td>
+
+                <span
+                    class="priority-badge ${priorityClass}"
+                >
+                    ${priority}
+                </span>
+
+            </td>
+
+
+            <td>
+
+                <span class="action-badge">
+                    ${report.action_required || "Not Assigned"}
+                </span>
+
+            </td>
+
+        `;
+
+
+        table.appendChild(row);
+
+    });
+
+})
+
+
+.catch(error => {
+
+    console.error(error);
+
+
+    document.getElementById(
+        "reportTable"
+    ).innerHTML =
+
+        '<tr>' +
+        '<td colspan="8" class="message-row">' +
+        'Unable to load report' +
+        '</td>' +
+        '</tr>';
+
+});
+
+
+function goDashboard() {
+
+    window.location.href =
+        "dashboard.html";
+
+}
+
+</script>
+
+</body>
+</html>

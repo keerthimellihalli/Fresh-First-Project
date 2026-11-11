@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>History - Perishable Stock Verification</title>
+
+    <link rel="stylesheet" href="css/style.css">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f7f5ff;
+            color: #1e1b4b;
+        }
+
+        .page-container {
+            width: 100%;
+            min-height: 100vh;
+            padding: 30px;
+        }
+
+        /* Header */
+        .top-header {
+            background: linear-gradient(135deg, #4c1d95, #312e81);
+            color: white;
+            padding: 25px 30px;
+            border-radius: 18px;
+            margin-bottom: 25px;
+            box-shadow: 0 8px 25px rgba(76, 29, 149, 0.20);
+        }
+
+        .top-header h1 {
+            margin: 0 0 8px;
+            font-size: 28px;
+            color: white;
+        }
+
+        .top-header p {
+            margin: 0;
+            color: #e9d5ff;
+            font-size: 14px;
+        }
+
+        /* History Card */
+        .history-card {
+            background: white;
+            border-radius: 18px;
+            padding: 25px;
+            box-shadow: 0 5px 20px rgba(49, 46, 129, 0.10);
+            border: 1px solid #e9e5ff;
+        }
+
+        .history-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            gap: 15px;
+        }
+
+        .history-title h2 {
+            margin: 0;
+            font-size: 20px;
+            color: #312e81;
+        }
+
+        .history-badge {
+            background: #ede9fe;
+            color: #6d28d9;
+            padding: 8px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        /* Table */
+        .table-wrapper {
+            width: 100%;
+            overflow-x: auto;
+            border-radius: 12px;
+            border: 1px solid #e5e7eb;
+        }
+
+        table {
+            width: 100%;
+            min-width: 850px;
+            border-collapse: collapse;
+            background: white;
+        }
+
+        thead {
+            background: linear-gradient(135deg, #4c1d95, #4338ca);
+            color: white;
+        }
+
+        th {
+            padding: 15px 12px;
+            text-align: left;
+            font-size: 13px;
+            white-space: nowrap;
+        }
+
+        td {
+            padding: 14px 12px;
+            border-bottom: 1px solid #eeeef5;
+            font-size: 14px;
+            color: #374151;
+            vertical-align: top;
+        }
+
+        tbody tr:hover {
+            background: #faf9ff;
+        }
+
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Action Type */
+        .action-type {
+            display: inline-block;
+            padding: 6px 10px;
+            border-radius: 20px;
+            background: #ede9fe;
+            color: #6d28d9;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        /* Description */
+        .description {
+            max-width: 400px;
+            line-height: 1.5;
+        }
+
+        /* Date */
+        .date-time {
+            color: #4b5563;
+            white-space: nowrap;
+            font-size: 13px;
+        }
+
+        /* Empty / Error */
+        .message-row {
+            text-align: center !important;
+            padding: 35px !important;
+            color: #6b7280 !important;
+            font-size: 15px !important;
+        }
+
+        /* Back Button */
+        .bottom-actions {
+            margin-top: 20px;
+        }
+
+        .back-btn {
+            border: none;
+            background: linear-gradient(135deg, #6366f1, #4c1d95);
+            color: white;
+            padding: 11px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            transition: 0.2s;
+        }
+
+        .back-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 5px 15px rgba(76, 29, 149, 0.25);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+
+            .page-container {
+                padding: 15px;
+            }
+
+            .top-header {
+                padding: 20px;
+            }
+
+            .top-header h1 {
+                font-size: 23px;
+            }
+
+            .history-card {
+                padding: 15px;
+            }
+
+            .history-title {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="page-container">
+
+    <!-- Header -->
+    <div class="top-header">
+        <h1>📜 Verification History</h1>
+        <p>View previous stock verification activities and system actions.</p>
+    </div>
+
+    <!-- History Card -->
+    <div class="history-card">
+
+        <div class="history-title">
+            <h2>🕒 Activity History</h2>
+
+            <span class="history-badge">
+                Verification Records
+            </span>
+        </div>
+
+        <div class="table-wrapper">
+
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Product</th>
+                        <th>Action Type</th>
+                        <th>Description</th>
+                        <th>Date & Time</th>
+                    </tr>
+                </thead>
+
+                <tbody id="historyTable">
+
+                    <tr>
+                        <td colspan="5" class="message-row">
+                            ⏳ Loading history...
+                        </td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+        <div class="bottom-actions">
+
+            <button class="back-btn" onclick="goDashboard()">
+                ← Back to Dashboard
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+fetch("../backend/history.php")
+
+.then(response => response.json())
+
+.then(history => {
+
+    const table = document.getElementById("historyTable");
+
+    table.innerHTML = "";
+
+    if (history.length === 0) {
+
+        table.innerHTML =
+            '<tr><td colspan="5" class="message-row">📭 No history found</td></tr>';
+
+        return;
+    }
+
+    history.forEach(item => {
+
+        const row = document.createElement("tr");
+
+        row.innerHTML = `
+            <td>
+                <strong>#${item.history_id}</strong>
+            </td>
+
+            <td>
+                <strong>${item.product_name}</strong>
+            </td>
+
+            <td>
+                <span class="action-type">
+                    ${item.action_type}
+                </span>
+            </td>
+
+            <td>
+                <div class="description">
+                    ${item.description}
+                </div>
+            </td>
+
+            <td>
+                <span class="date-time">
+                    🕒 ${item.created_at}
+                </span>
+            </td>
+        `;
+
+        table.appendChild(row);
+
+    });
+
+})
+
+.catch(error => {
+
+    console.error(error);
+
+    document.getElementById("historyTable").innerHTML =
+        '<tr><td colspan="5" class="message-row">❌ Unable to load history</td></tr>';
+
+});
+
+
+function goDashboard() {
+
+    window.location.href = "dashboard.html";
+
+}
+
+</script>
+
+</body>
+</html>
